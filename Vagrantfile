@@ -3,7 +3,7 @@ groupadd docker
 gpasswd -a vagrant docker
 cp /vagrant/admiral /usr/local/bin
 cp /vagrant/*.sh /home/vagrant/
-cp /vagrant/README /home/vagrant/
+cp /vagrant/README.md /home/vagrant/
 echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
 apt-get -y update
 apt-get -y --force-yes install lxc-docker
