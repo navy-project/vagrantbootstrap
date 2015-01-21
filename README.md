@@ -1,63 +1,97 @@
-# Setup #
+# Getting started
 
-## Create your vagrant box ##
+In this tutorial you will learn how to do the following things:
+* Setting up the navy environment
+* Provision a multi-container application
+* De-provision a multi-container application
 
-Install vagrant and then from this directory:
+## Create your vagrant box
+
+[Install vagrant](https://www.vagrantup.com/) and then from this directory:
 
 ```
-vagrant up
+$ vagrant up
 ```
 
 It'll download the base box and will perform all setup and then you can:
 
 ```
-vagrant ssh
+$ vagrant ssh
 ```
 
-## Start the navyproject containers ##
-
-Now you're inside the vagrant box, you'll need to log into the docker hub.
-Entering unknown credentials will automatically create a new account:
-
-```
-docker login
-```
+## Start the navyproject containers
 
 Now start the navyproject containers. The first time this runs, it will take some time
 as it downloads the images from the docker hub.
 
 ```
-./start.sh
+$ ./start.sh
 ```
 
-To connect to the navy cluster, use *.vagrant.navyproject.com which resolves to the ip address of your vagrant box, 192.168.33.10.
+## Provision your first application
 
-Visit http://radar.vagrant.navyproject.com:8000 in your browser
+### Download the CLI (admiral)
 
-ssh to your vagrant box and run the integration test suite:
+Navy provides you with a CLI called `admiral` to manage your containers. You can
+[download the binary](https://github.com/navy-project/admiral/releases) for your platform from the GitHub repository.
 
-```
-vagrant ssh
-./run_tests.sh
-```
+For more information about how to use admiral please refer to the [README](https://github.com/navy-project/admiral).
 
-Watch the output in the browser
+### Deploy a multi-container application (convoy)
 
-View the source
+Admiral allows you to easily deploy a multi-container application by providing it with
+a configuration file called `manifest.yml`.
 
-Stop the navyproject containers
+The `manifest.yml` file allows you to define all the containers you wish to deploy
+and its dependencies. Please refer to the [manifest specification](#) for more information.
 
-```
-./stop.sh
-```
-
-## Work on the html / javascript ##
-
-To work on the html / javascript etc, run the navyproject containers in dev mode. This will result in the
-directory on your mac where the Vagrantfile resides becoming the document root for the reactclient container.
-Any files you put here will be served up when you visit http://radar.vagrant.navyproject.com:8000, allowing you to work on them
-freely. Replace the ./start.sh nodev step above with:
+Now please download the example `manifest.yml` to deploy our example application (drinking game):
 
 ```
-./start.sh dev
+$ curl -O https://gist.githubusercontent.com/Tobscher/2f2e8973f5d9520f448c/raw/b49b3886f701b9980f6e90d8a6d0bbc29485639a/manifest.yml
+```
+
+Run the following command to instruct navy to provision your containers:
+
+```
+$ admiral launch demo manifest.yml
+```
+
+The command above will do the following:
+* Provisions a new multi-container environment with the name `demo`
+* Registers your application to be accessible at https://demo.vagrant.navyproject.com
+
+Now check the status of your deployment via:
+
+```
+$ admiral status demo
+OK
+```
+
+Once the status of your deployment is `OK` you can access your application at https://game-demo.vagrant.navyproject.com.
+
+Congratulations! You just deployed your test application.
+
+### Stop your deployment
+
+You have probably played our drinking game for quite a while now. If you don't need
+your deployment anymore run the following command to de-provision your application:
+
+```
+$ admiral destroy demo
+```
+
+Check the status:
+
+```
+$ admiral status demo
+NOT_FOUND
+```
+
+## How to stop the navyproject containers
+
+All navyproject containers can be stopped by executing the stop script:
+
+```
+$ ./stop.sh
 ```
