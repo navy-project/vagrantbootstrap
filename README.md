@@ -16,18 +16,18 @@ vagrant ssh
 
 ## Start the navyproject containers ##
 
-Now you're inside the vagrant box, you'll need to log into the docker hub. 
+Now you're inside the vagrant box, you'll need to log into the docker hub.
 Entering unknown credentials will automatically create a new account:
 
 ```
 docker login
 ```
 
-Now start the navyproject containers, not in development mode. The first time this runs, it will take some time
+Now start the navyproject containers. The first time this runs, it will take some time
 as it downloads the images from the docker hub.
 
 ```
-./start.sh nodev
+./start.sh
 ```
 
 To connect to the navy cluster, use *.vagrant.navyproject.com which resolves to the ip address of your vagrant box, 192.168.33.10.
